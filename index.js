@@ -18,7 +18,8 @@ dbConnection();
 
 //rutas
 
-app.use('/prospectos', require('./routes/prospecto.route.js'));
+app.use('/api/prospectos', require('./routes/prospecto.route.js'));
+app.use('/api/subir',require('./routes/subirArchivos'));
 
 app.listen(process.env.PORT, ()=>{
     console.log('corroendo en el puerto' + process.env.PORT );

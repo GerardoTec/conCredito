@@ -10,7 +10,7 @@ const ProspectoSchema = Schema({
         type: String,
         require: true
     },
-    SegundoApellido:{
+    segundoApellido:{
         type: String
     },
     Calle:{
@@ -36,6 +36,9 @@ const ProspectoSchema = Schema({
     rfc:{
         type:String,
         require:true
+    },
+    archivo:{
+        type: String
     }
 });
 

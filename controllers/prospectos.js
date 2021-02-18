@@ -1,11 +1,13 @@
-const { Prospecto }= require('../models/prospecto.model');
+const prospectoModel = require('../models/prospecto.model');
+
 
 
 
 getProspecto = async (req, res) =>{
 
-    const prospecto = await Prospecto.find();
-                               
+    const prospecto = await prospectoModel.find();
+              
+    
 
     res.json({
         StatusCode:true,
@@ -19,7 +21,7 @@ getProspecto = async (req, res) =>{
     const { rfc } = req.body;
 
     try {
-        const existe = await Prospecto.findOne({rfc});
+        const existe = await prospectoModel.findOne({rfc});
       // verificamos que no exista un prospecto 
         if(existe){
             return res.status(400).json({
@@ -28,7 +30,7 @@ getProspecto = async (req, res) =>{
             });
         }
         //creamos al Prospecto
-        const prospecto = new Prospecto(req.body);
+        const prospecto = new prospectoModel(req.body)
 
          await prospecto.save();
 
