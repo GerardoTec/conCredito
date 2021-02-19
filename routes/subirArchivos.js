@@ -11,6 +11,6 @@ router.use(fileUpload());
 
 router.put('/:tipo/:id', subirArchivo);
 
-router.get('/:tipo/:id', retornarImagen);
+router.get('/:tipo/:foto', retornarImagen);
 
 module.exports=router;

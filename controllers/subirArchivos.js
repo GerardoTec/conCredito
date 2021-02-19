@@ -51,12 +51,19 @@ const subirArchivo = async (req,res)=> {
 
     //path para guardar el archivo
 
-    const path = `./archivos/${tipo}/${nombreArchivo}`;
+    const directorio = path.join(__dirname, `../archivos/${tipo}/`);
+
+       // Verifica si existe la carpeta, si no existe la crea
+       if (!fs.existsSync(directorio)) {
+        fs.mkdirSync(directorio, {recursive: true});
+    }
+
+    directorioGuardar = `${directorio}/${nombreArchivo}`;
 
    
     //mover el archivo
 
-     file.mv(path, (err)=>{
+     file.mv(directorioGuardar, (err)=>{
          if(err){
              console.log(err);
              return res.status(500).json({
@@ -89,7 +96,7 @@ const retornarImagen =  (req, res) =>{
     const tipo = req.params.tipo;
     const foto = req.params.foto;
 
-const pathImg = path.join( __dirname, `../archivos/${ tipo }/${ foto }` );
+const pathImg = path.join( __dirname, `../archivos/${ tipo }/${ foto }`);
 
 if ( fs.existsSync( pathImg ) ) {
     res.sendFile( pathImg );
