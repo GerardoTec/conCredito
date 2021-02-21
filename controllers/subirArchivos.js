@@ -6,6 +6,9 @@ const fs = require('fs');
 
 const subirArchivo = async (req,res)=> {
 
+  const files= req.files;
+  console.log(files);
+    return
     const tipo = req.params.tipo;
     const id = req.params.id;
 

@@ -39,6 +39,14 @@ const ProspectoSchema = Schema({
     },
     archivo:{
         type: String
+    },
+    estado:{
+         type:String,
+         default:'Pendiente',
+    },
+    motivo:{
+        type:String,
+        require:true
     }
 });
 
