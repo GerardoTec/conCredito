@@ -13,7 +13,7 @@ const ProspectoSchema = Schema({
     segundoApellido:{
         type: String
     },
-    Calle:{
+    calle:{
         type: String,
         require: true
     },
@@ -35,11 +35,13 @@ const ProspectoSchema = Schema({
     },
     rfc:{
         type:String,
-        require:true
+        require:true    
     },
-    archivo:{
-        type: String
-    },
+    archivo:[
+        {  
+            type: String
+        }
+        ],
     estado:{
          type:String,
          default:'Pendiente',

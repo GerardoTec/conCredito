@@ -22,8 +22,6 @@ const upload = multer({storage});
 
     const prospecto = await prospectoModel.find();
               
-    
-
     res.json({
         StatusCode:true,
         prospecto
@@ -32,7 +30,7 @@ const upload = multer({storage});
    };
 
  crearProspecto = async (req, res) =>{
-     const { rfc } = req.body;
+
      const files = req.files.archivo;
      
 
@@ -43,17 +41,20 @@ const upload = multer({storage});
          });
       }
 
-     const extencionesValidas = ['jpg','png','pdf','gif'];
+      // hacemos un arreglo con las extenciones validas
+     const extencionesValidas = ['jpg','JPG','png','PNG','pdf','PDF','gif'];
 
+     //manejamos el files, para saber si solo es un archivo o es mas de uno
          if(files.length){
 
             let valido = true;
-
+        //recorremos el arreglo para poder sacar la extencion del archivo
              for(let i=0; i<files.length; i++){
                const cortado = files[i].name.split('.');
                const extencion = cortado[cortado.length-1].toLowerCase();
               // console.log(extencion);
     
+              // validamos las extenciones 
                 if(!extencionesValidas.includes(extencion)){
                     valido=false;
                     break;
@@ -69,7 +70,7 @@ const upload = multer({storage});
              }
 
          }else{
-
+        // aqui solo llega cuando es un solo archivo 
             const nombreCortado = files.name.split('.');
             const extencionArchivo = nombreCortado[nombreCortado.length-1];
 
@@ -85,47 +86,46 @@ const upload = multer({storage});
          }
 
          const prospecto = new prospectoModel(req.body);
-      
          const prospectoDB = await prospecto.save();
 
-    pathProspecto = path.resolve(__dirname, `../archivos/prospectos/${prospectoDB.id}`);
+    pathProspecto = path.resolve( `./archivos/prospectos/${prospectoDB.id}`);
      fs.mkdirSync(pathProspecto,{recursive:true});
 
      if(files.length){
          for(let i =0; i<files.length; i++){
-             const pathGuardar = `${pathProspecto}/${files[i].name}`;
-              prospectoDB.archivo = pathGuardar;
-              await prospectoDB.save();
+             const pathGuardar = `${pathProspecto}/${files[i].name}`; 
              files[i].mv(pathGuardar, (err)=>{
-                
-                if(err){
-                    console.log(err);  
+                 if(err){
+                     res.status(500).json({
+                         statusCode:false,
+                         msg:'Occurrio un problema al mover los archivos'
+                     }) 
                     }
+
                 });
-           //  console.log(pathGuardar)
+                nombreArchivo = `${files[i].name}`
+                prospectoDB.archivo.push(nombreArchivo);  
+                await prospectoDB.save();   
          }
      }else{
-        const pathGuardar=  `${pathProspecto}/${files.name}`;
-        
-        files.mv(pathGuardar,(err)=>{
-           
+        const pathGuardar=  `${pathProspecto}/${files.name}`;   
+        files.mv(pathGuardar,(err)=>{    
             if(err){
-                console.log(err);
+                res.status(500).json({
+                    statusCode:false,
+                    msg:'Occurrio un problema al mover el archivo'
+                }) 
             }
         });
-        
-       // console.log(pathGuardar);
+
+        nombreArchivo = `${files.name}`
+        prospectoDB.archivo = nombreArchivo;
+        await prospectoDB.save();
      }
-
-      
-       
-    
-
-      console.log(prospectoDB);
-
-
+  
      res.json({
-         ok:true
+         ok:true,
+         prospectoDB
      });
     
  } 
